@@ -1,0 +1,30 @@
+import cv2
+import numpy as np
+
+# Load face classifier
+faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+
+# Initialise the camera
+cam = cv2.VideoCapture(0)
+cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+cam.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+
+while True:
+    # Take in image
+    ret, frame = cam.read()
+    # Detect faces
+    greyscaleImage = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # Greyscale makes image processing easier (makes sense as haar features)
+    faces = faceCascade.detectMultiScale(greyscaleImage, scaleFactor=1.1, minNeighbors=8, minSize=(30,30))
+    
+    # Draw rectangle around face
+    for (x, y, w, h) in faces:
+        cv2.rectangle(frame, (x,y), (x+w, y+h), (255, 0, 0), 2)
+
+    # Show frame with faces
+    cv2.imshow("Detected Faces", frame)
+
+    if cv2.waitKey(1) == 27: # 27 = esc
+        break
+
+cam.release()
+cv2.destroyAllWindows()
