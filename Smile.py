@@ -11,7 +11,7 @@ cam = cv2.VideoCapture(0)
 cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
 cam.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
 
-save_path = r"C:\Users\simmo\OneDrive\Smile Pictures"
+save_path = r"C:\Users\joshr\OneDrive\Documents\Projects\Python Projects\Obsessive-Smiling-Camera"
 if not os.path.exists(save_path):
     os.makedirs(save_path)
 
