@@ -16,7 +16,7 @@ if not os.path.exists(save_path):
     os.makedirs(save_path)
 
 def save_and_show_smile_image(smiling_image, smile_rating, person_id):
-    file_path = os.path.join(save_path, f"smiling_face_{person_id}_{smile_rating}.jpg")
+    file_path = os.path.join(save_path, f"smiling_face_{math.floor(smile_rating)}.jpg")
     cv2.imwrite(file_path, smiling_image)
     print(f"Smiling face saved to: {file_path}")
     cv2.putText(smiling_image, f"Smile Intensity: {smile_rating}/10", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
@@ -132,6 +132,8 @@ def main_menu():
 def main_loop():
     while True:
         ret, frame = cam.read()
+        if frame is None:
+            continue
         frame = cv2.flip(frame, 1)
 
         smile_detected, smiling_people, ratings = process_frame(frame)
