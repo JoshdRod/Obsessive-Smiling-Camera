@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Camera Access</title>
+  <link href="https://fonts.googleapis.com/css2?family=Anime+Ace&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-image: url('ombre.jpg'); /* Image in the same folder */
+      background-size: cover; /* Ensures the image covers the entire page */
+      background-position: center; /* Centers the image */
+      background-repeat: no-repeat; /* Prevents the image from repeating */
+      margin: 0;
+      min-height: 100vh; /* Ensure body takes up at least full viewport height */
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start; /* Start from the top */
+      align-items: center;
+      color: white; /* Text color for better visibility on the image */
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      padding-top: 50px; /* Adds padding only to the top of the body */
+      box-sizing: border-box; /* Ensures padding doesn't affect the layout */
+      padding-left: 20px; /* Add padding to the left */
+      padding-right: 20px; /* Add padding to the right */
+      overflow-x: hidden; /* Prevent horizontal scroll */
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 50px; /* Adds space between title and content */
+    }
+
+    /* Make video take full width of its container */
+    #video {
+      margin-top: 33px;
+      margin-left: 50px;
+      width: 35%; /* Video will take the full width of its container */
+      height: auto; /* Video height will be 100% of the container height */
+      object-fit: cover; /* Ensure the video covers the container, cropping if needed */
+      border-radius: 10px;
+      box-shadow: none; /* Initially no shadow */
+      transition: all 0.3s ease; /* Smooth transition for shadow */
+      transform: scaleX(-1);
+    }
+
+    #startBtn {
+      margin-top: 70px;
+      padding: 15px 30px;
+      margin-right: 800px;
+      width: 35%;
+      font-family: 'Arial', sans-serif;
+      background: #89cf8c;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 30px;
+      height: 100px;
+      color: white;
+      display: flex;
+      justify-content: center; /* Center text horizontally */
+      align-items: center; /* Center text vertically */
+      gap: 10px;
+      box-shadow: 0 3px 5px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+      font-weight: bold;
+    }
+
+    #startBtn:hover {
+      transform: scale(1.05);
+    }
+
+    .small-blue-background {
+      background-color: #53b3df;
+      position: absolute;
+      align-items: center;
+      width: 40%; /* Adjust the width to make it smaller */
+      height: 750px; /* Set a smaller height */
+      border-radius: 10px; /* Optional: add rounded corners */
+      padding-left: 20px;
+      z-index: -1; /* Place it behind the video */
+    }
+
+    /* New container to be parallel to small-blue-background */
+    .small-red-background {
+      background-color: #53b3df; /* Red background */
+      position: absolute;
+      align-items: center;
+      width: 51%; /* Same width as small-blue-background */
+      height: 710px;
+      border-radius: 10px;
+      padding: 20px; /* Even padding around the red box */
+      z-index: -1; /* Place it behind the video */
+      left: 45%; /* Position the new container to the right of small-blue-background */
+      display: grid;
+      grid-template-columns: repeat(4, 1fr); /* 4 columns */
+      grid-template-rows: repeat(4, 1fr); /* 4 rows */
+      gap: 10px; /* Smaller gap between squares */
+    }
+
+    /* Style for the small white squares */
+    .white-square {
+      background-color: white;
+      width: 170px; /* Smaller squares */
+      height: 170px; /* Smaller squares */
+      border-radius: 5px; /* Optional: rounded corners */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+      display: flex;
+      justify-content: center; /* Center content horizontally */
+      align-items: center; /* Center content vertically */
+      position: relative; /* To position the image behind the text */
+    }
+
+    .white-square img {
+      position: absolute; /* To place the image behind the text */
+      top: 5%;
+      left: 5%;
+      width: 90%; /* Slightly smaller than the container */
+      height: 90%;
+      object-fit: cover; /* Ensure the image covers the square */
+    }
+
+    /* Text inside the white squares */
+    .white-square p {
+      position: relative;
+      z-index: 1; /* Ensure the text is on top of the image */
+      font-size: 2em; /* Adjust text size */
+      font-weight: bold;
+      color: #53b3df; /* Blue text color */
+    }
+
+    /* Style for the center square */
+    .center-square {
+      background-color: white;
+      width: 355px; /* 4 times larger square in the center */
+      height: 350px; /* 4 times larger square in the center */
+      border-radius: 5px; /* Optional: rounded corners */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Larger shadow */
+      grid-column: 2 / 4; /* Center it horizontally (spanning 2 columns) */
+      grid-row: 2 / 4; /* Center it vertically (spanning 2 rows) */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0; /* Remove padding to make sure image fits inside */
+      position: relative;
+    }
+
+    .center-square img:first-of-type {
+      width: 95%; /* Slightly smaller for even fitting */
+      height: 95%;
+      object-fit: contain; /* Ensures the image fits inside evenly */
+      border-radius: 5px; /* Optional: rounded corners */
+    }
+
+    /* Animated overlay image positioned near the bottom of the center square */
+    .center-overlay {
+      position: absolute;
+      bottom: 5%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50%; /* Adjust size as needed */
+      height: auto;
+    }
+    
+    .container {
+      display: flex;
+      justify-content: left;
+      margin-top: 20px;
+      padding-left: 20px;
+      position: relative; /* Make sure the smaller background is positioned relative to the container */
+      width: 100%; /* Ensure it takes full width */
+      height: 400px; /* Set the container height to ensure video fits */
+    }
+
+    /* Blue background section styling */
+    .blue-background {
+      width: 100%;
+      background-color: rgba(0, 123, 181, 0.5); /* Blue with 50% opacity */
+      padding-top: 200px; /* Adds padding only to the top of the blue box */
+      padding-left: 20px;
+      padding-right: 20px;
+      color: white;
+      text-align: center;
+      font-size: 2em;
+      margin-top: 200px; /* Adds space from the previous content */
+      height: 600px; /* Controls the height of the blue section */
+    }
+
+    /* New Leaderboard Box */
+    .leaderboard-box {
+      margin-top: 10px;
+      margin-left: 0px; /* Added 40px margin to the left */
+      margin-right: 800px;
+      padding: 20px;
+      background-color: #eada96;
+      color: rgb(255, 255, 255);
+      width: 33%;
+      border-radius: 10px;
+      font-size: 1.5em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 3px 5px rgba(0,0,0,0.1);
+    }
+
+    .leaderboard-box a {
+      text-decoration: none;
+      color: rgb(255, 255, 255);
+      font-family: 'Arial', sans-serif;
+      font-weight: bold;
+    }
+
+    .leaderboard-box:hover {
+      background-color: #facb5d;
+    }
+  </style>
+</head>
+<body>
+
+  <div>
+    <!-- Title image that changes every 0.5 seconds -->
+    <img id="titleImage" src="1ani.png" alt="Title Image" style="max-width: 40%; height: auto; border-radius: 10px;">
+  </div>
+
+  <div class="container">
+    <!-- New smaller blue background div -->
+    <div class="small-blue-background"></div>
+    <!-- New red background container parallel to the blue one -->
+    <div class="small-red-background">
+      <!-- 12 small white squares with images and numbers -->
+      <div class="white-square">
+<<<<<<< HEAD:scrapscrap.html
+        <img src="smile7.png" alt="Face Image">
+=======
+        <img src="smile1.png" alt="Face Image">
+>>>>>>> 58b3ee7b13fb4355b53eaaae862a4a67c2d4ab75:index.html
+        <p>1</p>
+      </div>
+      <div class="white-square">
+        <img src="smile2.png" alt="Face Image">
+        <p>2</p>
+      </div>
+      <div class="white-square">
+        <img src="smile3.png" alt="Face Image">
+        <p>3</p>
+      </div>
+      <div class="white-square">
+        <img src="smile4.png" alt="Face Image">
+        <p>4</p>
+      </div>
+      <div class="white-square">
+        <img src="smile5.png" alt="Face Image">
+        <p>5</p>
+      </div>
+      <div class="white-square">
+        <img src="smile6.png" alt="Face Image">
+        <p>6</p>
+      </div>
+      <div class="white-square">
+        <img src="smile7.png" alt="Face Image">
+        <p>7</p>
+      </div>
+      <div class="white-square">
+        <img src="smile8.png" alt="Face Image">
+        <p>8</p>
+      </div>
+      <div class="white-square">
+        <img src="smile9.png" alt="Face Image">
+        <p>9</p>
+      </div>
+      <div class="white-square">
+        <img src="smile10.png" alt="Face Image">
+        <p>10</p>
+      </div>
+      <div class="white-square">
+        <img src="smile11.png" alt="Face Image">
+        <p>11</p>
+      </div>
+      <div class="white-square">
+        <img src="smile12.png" alt="Face Image">
+        <p>12</p>
+      </div>
+      <!-- Center square with animated biggest looser overlay -->
+      <div class="center-square">
+        <img src="face.png" alt="Face Image">
+        <img src="looser1.png" alt="Animated Looser" class="center-overlay" id="animatedLooser">
+      </div>
+    </div>
+    <video id="video" autoplay></video>
+  </div>
+
+  <button id="startBtn">Turn Camera On</button>
+
+  <!-- Leaderboard Box -->
+  <div class="leaderboard-box">
+    <a href="leaders.html">Leaderboard</a>
+  </div>
+
+  <div class="blue-background">
+    <img src="smile1.png" alt="Looser Image" style="max-width: 20%; height: auto;">
+  </div>
+
+  <script>
+    const startBtn = document.getElementById('startBtn');
+    const video = document.getElementById('video');
+
+    // Check if browser supports media devices API
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      startBtn.addEventListener('click', startCamera);
+    } else {
+      alert("Your browser does not support camera access.");
+    }
+
+    // Function to start the camera
+    function startCamera() {
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then((stream) => {
+          video.srcObject = stream; // Set the stream to the video element
+
+          // Add shadow after camera is turned on
+          video.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+        })
+        .catch((error) => {
+          console.log("Error accessing camera: ", error);
+          alert("Error accessing camera. Please make sure your device has a camera and you have granted permissions.");
+        });
+    }
+
+    // JavaScript to change the title image every 0.5 seconds
+    let currentImage = 1;
+    function changeImage() {
+      currentImage = (currentImage === 1) ? 2 : 1;
+      document.getElementById('titleImage').src = currentImage === 1 ? '1ani.png' : '2ani.png';
+    }
+    setInterval(changeImage, 400);
+
+    // Animate the biggest looser overlay inside the center square
+    let currentLooser = 1;
+    setInterval(() => {
+      currentLooser = (currentLooser === 1) ? 2 : 1;
+      document.getElementById('animatedLooser').src = currentLooser === 1 ? 'looser1.png' : 'looser2.png';
+    }, 400);
+  </script>
+
+</body>
+</html>
