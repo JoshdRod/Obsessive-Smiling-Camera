@@ -1,6 +1,3 @@
-- Make camera give each smiling face an intensity
-- Convert into function that outputs image of person, and their smile intensity
-
-/d Make Camera work without detecting faces
-/d Make camera detect faces automatically
-/d Make camera detect smiling faces automatically
+- Remove "view top 5" stuff from python - just need the camera, the ranking, and the file writing
+- Use flask to show on website (how? think there's grey ppts on it)
+- Spin up webserver on github pages
