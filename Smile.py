@@ -142,21 +142,11 @@ def main_loop():
             for i, smiling_image in enumerate(smiling_people):
                 cv2.imshow(f"Person {i+1} - Smile Rating: {ratings[i]}/10", smiling_image)
 
-            print("All faces smiled! Press 'Esc' to exit.")
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
-        else:
-            print("Not all faces are smiling. Please try again.")
-
         cv2.imshow("Detected Faces", frame)
 
         key = cv2.waitKey(1)
         if key == 27:
-            print("Exiting program.")
-            break
-        elif key == ord('q'):
-            print("Exiting program.")
-            break
+            exit_program()
 
 def exit_program():
     print("Exiting program.")
