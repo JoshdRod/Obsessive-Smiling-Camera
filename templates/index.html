@@ -231,27 +231,23 @@
     <div class="small-red-background">
       <!-- 12 small white squares with images and numbers -->
       <div class="white-square">
-<<<<<<< HEAD:scrapscrap.html
-        <img src="smile7.png" alt="Face Image">
-=======
-        <img src="smile1.png" alt="Face Image">
->>>>>>> 58b3ee7b13fb4355b53eaaae862a4a67c2d4ab75:index.html
+        <img src="../Ranked Smiles/Smile0.jpg" alt="Face Image">
         <p>1</p>
       </div>
       <div class="white-square">
-        <img src="smile2.png" alt="Face Image">
+        <img src="../Ranked Smiles/Smile1.jpg" alt="Face Image">
         <p>2</p>
       </div>
       <div class="white-square">
-        <img src="smile3.png" alt="Face Image">
+        <img src="../Ranked Smiles/Smile2.jpg" alt="Face Image">
         <p>3</p>
       </div>
       <div class="white-square">
-        <img src="smile4.png" alt="Face Image">
+        <img src="../Ranked Smiles/Smile3.jpg" alt="Face Image">
         <p>4</p>
       </div>
       <div class="white-square">
-        <img src="smile5.png" alt="Face Image">
+        <img src="../Ranked Smiles/Smile4.jpg" alt="Face Image">
         <p>5</p>
       </div>
       <div class="white-square">
@@ -285,7 +281,7 @@
       <!-- Center square with animated biggest looser overlay -->
       <div class="center-square">
         <img src="face.png" alt="Face Image">
-        <img src="looser1.png" alt="Animated Looser" class="center-overlay" id="animatedLooser">
+        <img src="assets/looser1.PNG" alt="Animated Looser" class="center-overlay" id="animatedLooser">
       </div>
     </div>
     <video id="video" autoplay></video>
@@ -332,7 +328,7 @@
     let currentImage = 1;
     function changeImage() {
       currentImage = (currentImage === 1) ? 2 : 1;
-      document.getElementById('titleImage').src = currentImage === 1 ? '1ani.png' : '2ani.png';
+      document.getElementById('titleImage').src = currentImage === 1 ? 'assets/1ani.png' : 'assets/2ani.png';
     }
     setInterval(changeImage, 400);
 
@@ -340,7 +336,7 @@
     let currentLooser = 1;
     setInterval(() => {
       currentLooser = (currentLooser === 1) ? 2 : 1;
-      document.getElementById('animatedLooser').src = currentLooser === 1 ? 'looser1.png' : 'looser2.png';
+      document.getElementById('animatedLooser').src = currentLooser === 1 ? 'assets/looser1.png' : 'assets/looser2.png';
     }, 400);
   </script>
 

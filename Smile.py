@@ -97,5 +97,3 @@ def process_frame(frame):
 #             cam.release()
 #             cv2.destroyAllWindows()
 #             exit()
-
-main_loop()
