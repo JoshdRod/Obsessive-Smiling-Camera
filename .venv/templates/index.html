@@ -231,57 +231,57 @@
     <div class="small-red-background">
       <!-- 12 small white squares with images and numbers -->
       <div class="white-square">
-        <img src="../Ranked Smiles/Smile0.jpg" alt="Face Image">
+        <img src="static/Ranked Smiles/Smile0.jpg" alt="Face Image">
         <p>1</p>
       </div>
       <div class="white-square">
-        <img src="../Ranked Smiles/Smile1.jpg" alt="Face Image">
+        <img src="static/Ranked Smiles/Smile1.jpg" alt="Face Image">
         <p>2</p>
       </div>
       <div class="white-square">
-        <img src="../Ranked Smiles/Smile2.jpg" alt="Face Image">
+        <img src="static/Ranked Smiles/Smile2.jpg" alt="Face Image">
         <p>3</p>
       </div>
       <div class="white-square">
-        <img src="../Ranked Smiles/Smile3.jpg" alt="Face Image">
+        <img src="static/Ranked Smiles/Smile3.jpg" alt="Face Image">
         <p>4</p>
       </div>
       <div class="white-square">
-        <img src="../Ranked Smiles/Smile4.jpg" alt="Face Image">
+        <img src="static/Ranked Smiles/Smile4.jpg" alt="Face Image">
         <p>5</p>
       </div>
       <div class="white-square">
-        <img src="smile6.png" alt="Face Image">
+        <img id="testImage" src="" alt="Face Image">
         <p>6</p>
       </div>
       <div class="white-square">
-        <img src="smile7.png" alt="Face Image">
+        <!-- <img src="smile7.png" alt="Face Image"> -->
         <p>7</p>
       </div>
       <div class="white-square">
-        <img src="smile8.png" alt="Face Image">
+        <!-- <img src="smile8.png" alt="Face Image"> -->
         <p>8</p>
       </div>
       <div class="white-square">
-        <img src="smile9.png" alt="Face Image">
+        <!-- <img src="smile9.png" alt="Face Image"> -->
         <p>9</p>
       </div>
       <div class="white-square">
-        <img src="smile10.png" alt="Face Image">
+        <!-- <img src="smile10.png" alt="Face Image"> -->
         <p>10</p>
       </div>
       <div class="white-square">
-        <img src="smile11.png" alt="Face Image">
+        <!-- <img src="smile11.png" alt="Face Image"> -->
         <p>11</p>
       </div>
       <div class="white-square">
-        <img src="smile12.png" alt="Face Image">
+        <!-- <img src="smile12.png" alt="Face Image"> -->
         <p>12</p>
       </div>
       <!-- Center square with animated biggest looser overlay -->
       <div class="center-square">
-        <img src="face.png" alt="Face Image">
-        <img src="assets/looser1.PNG" alt="Animated Looser" class="center-overlay" id="animatedLooser">
+        <img src="static/face.png" alt="Face Image">
+        <img src="static/looser1.PNG" alt="Animated Looser" class="center-overlay" id="animatedLooser">
       </div>
     </div>
     <video id="video" autoplay></video>
@@ -295,7 +295,7 @@
   </div>
 
   <div class="blue-background">
-    <img src="smile1.png" alt="Looser Image" style="max-width: 20%; height: auto;">
+    <img src="static/smile1.png" alt="Looser Image" style="max-width: 20%; height: auto;">
   </div>
 
   <script>
@@ -314,7 +314,7 @@
       navigator.mediaDevices.getUserMedia({ video: true })
         .then((stream) => {
           video.srcObject = stream; // Set the stream to the video element
-
+          
           // Add shadow after camera is turned on
           video.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
         })
@@ -324,11 +324,37 @@
         });
     }
 
+    // Take a screenshot of the camera every second, and send it to the server
+    setInterval(() => {
+      var canvas = document.createElement('canvas');
+      canvas.width = 640;
+      canvas.height = 480;
+      var ctx = canvas.getContext('2d');
+      //draw image to canvas. scale to target dimensions
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      //convert to desired file format
+      var dataURI = canvas.toDataURL('image/jpeg');
+      document.getElementById('testImage').src = dataURI;
+
+      // Send a post request to the server
+      fetch("http://127.0.0.1:5000/sendImage", {
+            method: "POST",
+            body: JSON.stringify({
+              data: dataURI
+            }),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8"
+            }
+            });
+
+    }, 1000);
+
     // JavaScript to change the title image every 0.5 seconds
     let currentImage = 1;
     function changeImage() {
       currentImage = (currentImage === 1) ? 2 : 1;
-      document.getElementById('titleImage').src = currentImage === 1 ? 'assets/1ani.png' : 'assets/2ani.png';
+      document.getElementById('titleImage').src = currentImage === 1 ? 'static/1ani.png' : 'static/2ani.png';
     }
     setInterval(changeImage, 400);
 
@@ -336,7 +362,7 @@
     let currentLooser = 1;
     setInterval(() => {
       currentLooser = (currentLooser === 1) ? 2 : 1;
-      document.getElementById('animatedLooser').src = currentLooser === 1 ? 'assets/looser1.png' : 'assets/looser2.png';
+      document.getElementById('animatedLooser').src = currentLooser === 1 ? 'static/looser1.png' : 'static/looser2.png'; 
     }, 400);
   </script>
 
